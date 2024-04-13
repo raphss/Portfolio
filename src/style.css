@@ -1,0 +1,208 @@
+@import "bootstrap/dist/css/bootstrap";
+
+:root {
+    color-scheme: dark;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-size: 2vh;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
+}
+
+section {
+    scroll-snap-align: start;
+    scroll-padding-top: 10vh;
+    z-index: 0;
+}
+
+.bg-darker {
+    background-color: #111314;
+}
+
+.bg-darkened {
+    background-color: #000000;
+}
+
+.navbar-container {
+    min-width: 100%;
+    font-size: 1.2rem;
+}
+
+.navbar {
+    height: 10vh;
+    position: fixed;
+    z-index: 1;
+    right: 0%;
+    width: 100%;
+}
+
+.nav-item {
+    padding: 0 1rem;
+    display: flex;
+    justify-content: end;
+}
+
+.active {
+    font-size: 1.3rem;
+}
+
+.section {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8vh 2vh 0vh 2vh;
+    height: 100vh;
+    margin: 0vh 2vh;
+}
+
+.profile-picture {
+    height: 35vh;
+    border-radius: 50%;
+    border: 0.1rem solid black;
+    margin-bottom: 2vh;
+}
+
+.div-profile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 4vh;
+    margin-top: 2vh;
+}
+
+.btn {
+    font-size: 2.5vh;
+}
+
+.div-about {
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    flex-direction: column;
+    font-size: 4vh;
+    width: 55%;
+    margin-top: 20vh;
+}
+
+.div-socials {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 3vh;
+    width: 40vh;
+    margin-top: 5vh;
+    margin-bottom: 20vh;
+}
+
+.icon svg {
+    width: 6vh;
+    height: 6vh;
+    opacity: 50%;
+    transition: transform 0.5s ease-in-out, opacity ease-in-out 0.1s;
+}
+
+.icon:hover svg {
+    transform: rotate(360deg);
+    opacity: 100%;
+}
+
+.about-section {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+}
+
+.section-title {
+    position: relative;
+    font-size: 4vh;
+    text-align: center;
+    padding: 2vh;
+    margin: 0vh 2vh;
+}
+
+.section-title::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 0.2vh;
+    background-color: white;
+    bottom: 0;
+    left: 0;
+}
+
+.section-text {
+    width: 80%;
+    margin: 2vh 2vh 0vh 2vh;
+    font-size: 3vh;
+}
+
+.tools {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4vh;
+    padding: 2vh 2vh 3vh 2vh;
+    flex-wrap: wrap;
+}
+
+.tool svg {
+    max-width: 7vh;
+    max-height: 7vh;
+}
+
+@media only screen and (max-width: 1280px) {
+    .navbar {
+        height: auto;
+    }
+
+    .nav-item {
+        padding: 0rem;
+        margin-top: 2vh;
+    }
+
+    .section {
+        flex-direction: column;
+        padding-top: 11vh;
+    }
+
+    .home-section {
+        height: 100vh;
+    }
+
+    .profile-picture {
+        height: 30vh;
+    }
+
+    .about-section {
+        height: auto;
+    }
+
+    .div-about {
+        justify-content: center;
+        align-items: center;
+        font-size: 3vh;
+        width: 75%;
+        margin: 4vh;
+    }
+
+    .div-socials {
+        justify-content: center;
+        gap: 3vh;
+        width: 40vh;
+        margin: 2vh;
+    }
+
+    .icon svg {
+        width: 5vh;
+        height: 5vh;
+    }
+}
