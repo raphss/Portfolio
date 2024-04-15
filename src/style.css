@@ -302,7 +302,6 @@ textarea {
 @media only screen and (max-width: 480px) {
     .project-div img {
         height: 25vh;
-        width: -moz-fit-content;
         width: fit-content;
         padding: 2vh;
     }
@@ -317,6 +316,11 @@ textarea {
 
     .contact-div p {
         font-size: 2.5vh;
+    }
+
+    html {
+        scroll-behavior: smooth;
+        scroll-snap-type: y proximity;
     }
 }
 

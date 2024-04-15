@@ -53,6 +53,7 @@ module.exports = {
       title: 'Raphael Vilete',
       filename: 'index.html',
       scriptLoading: 'defer',
+      favicon: './src/images/icon.ico',
     }),
     new CopyWebpackPlugin({
       patterns: [
