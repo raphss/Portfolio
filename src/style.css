@@ -1,4 +1,5 @@
 @import "bootstrap/dist/css/bootstrap";
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap');
 
 :root {
     color-scheme: dark;
@@ -22,6 +23,18 @@ section {
     z-index: 0;
 }
 
+h1,
+h2,
+h3,
+.btn {
+    font-family: 'IBM Plex Sans', Helvetica, Arial, sans-serif;
+}
+
+p,
+.navbar {
+    font-family: Helvetica, Arial, sans-serif;
+}
+
 .bg-darker {
     background-color: #111314;
 }
@@ -38,7 +51,7 @@ section {
 .navbar {
     height: 10vh;
     position: fixed;
-    z-index: 1;
+    z-index: 1000 !important;
     right: 0%;
     width: 100%;
 }
@@ -65,7 +78,6 @@ section {
 .profile-picture {
     height: 35vh;
     border-radius: 50%;
-    border: 0.1rem solid black;
     margin-bottom: 2vh;
 }
 
@@ -159,6 +171,154 @@ section {
     max-height: 7vh;
 }
 
+.proj-section {
+    margin: 0vh;
+    padding: 5vh 2vh 0vh 2vh;
+    height: 100vh;
+}
+
+.div-projects-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.div-projects-buttons {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 35vh;
+    margin-top: 0vh;
+    margin-bottom: 4vh;
+}
+
+.div-projects-text h3 {
+    position: relative;
+    font-size: 4vh;
+    text-align: center;
+    padding: 2vh;
+    margin: 0vh 2vh;
+}
+
+.div-projects-text h3::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 0.2vh;
+    background-color: white;
+    bottom: 0;
+    left: 0;
+}
+
+.div-projects-text p {
+    padding: 2vh;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 2vh;
+}
+
+.div-slider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    padding: 20vh;
+    gap: 2vh;
+    height: 100vh;
+}
+
+.project-div img {
+    width: 45vw;
+    border-radius: 3vh;
+    padding: 2vh;
+}
+
+.slider-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2vh;
+}
+
+.contact-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 12vh;
+    height: 100vh;
+}
+
+.contact-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 75%;
+}
+
+.contact-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 2vh;
+    width: 100%;
+    margin: 2vh;
+}
+
+.contact-div p {
+    font-size: 3vh;
+}
+
+.contact-form input,
+textarea {
+    border: 0.2vh solid lightgray;
+    border-radius: 0.5vh;
+    width: 100%;
+    height: 5vh;
+    font-size: 2vh;
+    margin: 2vh 0vh;
+    padding: 1vh;
+}
+
+.contact-form textarea {
+    height: 20vh;
+}
+
+.footer {
+    margin-top: -4vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    bottom: 0%;
+    position: relative;
+    width: 100%;
+    z-index: 0;
+}
+
+@media only screen and (max-width: 480px) {
+    .project-div img {
+        height: 25vh;
+        width: fit-content;
+        padding: 2vh;
+    }
+
+    .contact-div {
+        width: 100%;
+    }
+
+    .contact-form {
+        gap: 1vh;
+    }
+
+    .contact-div p {
+        font-size: 2.5vh;
+    }
+}
+
 @media only screen and (max-width: 1280px) {
     .navbar {
         height: auto;
@@ -169,6 +329,10 @@ section {
         margin-top: 2vh;
     }
 
+    .profile-picture {
+        height: 30vh;
+    }
+
     .section {
         flex-direction: column;
         padding-top: 11vh;
@@ -176,10 +340,6 @@ section {
 
     .home-section {
         height: 100vh;
-    }
-
-    .profile-picture {
-        height: 30vh;
     }
 
     .about-section {
@@ -204,5 +364,18 @@ section {
     .icon svg {
         width: 5vh;
         height: 5vh;
+    }
+
+    .proj-section {
+        padding: 8vh 2vh 0vh 2vh;
+    }
+
+    .div-slider {
+        flex-direction: column;
+        padding: 2vh;
+    }
+
+    .div-projects-text p {
+        margin-bottom: 0vh;
     }
 }

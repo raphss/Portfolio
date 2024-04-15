@@ -4,6 +4,9 @@ import './style.css';
 import navbar from './navbar.js';
 import home from './home.js';
 import about from './about.js';
+import projects from './projects.js';
+import contact from './contact.js';
+import footer from './footer.js';
 
 if (process.env.NODE_ENV !== 'production') {
   console.log('Looks like we are in development mode!');
@@ -13,15 +16,28 @@ if (process.env.NODE_ENV !== 'production') {
 
 function component() {
   const nav = navbar();
+
   const homeSection = home();
   homeSection.id = '#';
+
   const aboutSection = about();
   aboutSection.id = 'sobre';
+
+  const projectsSection = projects();
+  projectsSection.id = 'projetos';
+
+  const contactSection = contact();
+  contactSection.id = 'contato';
+
+  const footerModule = footer();
 
   return {
     nav,
     homeSection,
     aboutSection,
+    projectsSection,
+    contactSection,
+    footerModule,
   };
 }
 
@@ -29,6 +45,9 @@ const elements = component();
 document.body.prepend(elements.nav);
 document.body.appendChild(elements.homeSection);
 document.body.appendChild(elements.aboutSection);
+document.body.appendChild(elements.projectsSection);
+document.body.appendChild(elements.contactSection);
+document.body.appendChild(elements.footerModule);
 
 const navLinks = document.getElementsByClassName('nav-link');
 let isScrollingFromNavClick = false;
@@ -49,6 +68,12 @@ for (let i = 0; i < navLinks.length; i++) {
   if (navLinks[i].textContent === 'Sobre') {
     navLinks[i].href = '#sobre';
   }
+  if (navLinks[i].textContent === 'Projetos') {
+    navLinks[i].href = '#projetos';
+  }
+  if (navLinks[i].textContent === 'Contato') {
+    navLinks[i].href = '#contato';
+  }
 }
 
 window.addEventListener('scroll', () => {
@@ -58,8 +83,13 @@ window.addEventListener('scroll', () => {
 
   const currentScrollPosition = window.pageYOffset;
 
-  const sections = [elements.homeSection, elements.aboutSection];
-  const sectionIds = ['#', '#sobre'];
+  const sections = [
+    elements.homeSection,
+    elements.aboutSection,
+    elements.projectsSection,
+    elements.contactSection,
+  ];
+  const sectionIds = ['#', '#sobre', '#projetos', '#contato'];
 
   removeActiveClass(navLinks);
 
