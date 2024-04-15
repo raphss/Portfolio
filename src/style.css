@@ -302,6 +302,7 @@ textarea {
 @media only screen and (max-width: 480px) {
     .project-div img {
         height: 25vh;
+        width: -moz-fit-content;
         width: fit-content;
         padding: 2vh;
     }

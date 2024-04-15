@@ -44,6 +44,12 @@ function home() {
   const cvButton = document.createElement('button');
   cvButton.classList.add('btn', 'btn-dark');
   cvButton.textContent = 'Baixar Curriculo';
+  cvButton.addEventListener('click', () => {
+    window.open(
+      // eslint-disable-next-line prettier/prettier
+      'https://raw.githubusercontent.com/raphss/Portfolio/main/Portfolio.pdf'
+    );
+  });
 
   divProfile.appendChild(profilePicture);
   divProfile.appendChild(name);
