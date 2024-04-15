@@ -117,7 +117,7 @@ function projects() {
   divRestaurant.classList.add('div-slider');
   const divRestaurantSlider = createProjectDiv(restaurantImages);
   const divRestaurantText = createProjectText(
-    'Restaurant Page',
+    'Restaurante Japonês',
     'Uma página de restaurante de comida japonesa. Apresenta opções do menu, ' +
       'informações de localização, contato e agenda de horários. Desenvolvida com HTML, CSS e JavaScript.'
   );

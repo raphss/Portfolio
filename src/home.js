@@ -47,7 +47,7 @@ function home() {
   cvButton.addEventListener('click', () => {
     window.open(
       // eslint-disable-next-line prettier/prettier
-      'https://raw.githubusercontent.com/raphss/Portfolio/main/Portfolio.pdf'
+      'https://raw.githubusercontent.com/raphss/Curriculo/main/Curriculo.pdf'
     );
   });
 

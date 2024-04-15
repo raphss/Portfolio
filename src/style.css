@@ -229,7 +229,8 @@ p,
 }
 
 .project-div img {
-    width: 45vw;
+    max-width: 45vw;
+    height: auto;
     border-radius: 3vh;
     padding: 2vh;
 }
@@ -246,7 +247,6 @@ p,
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    padding-top: 12vh;
     height: 100vh;
 }
 
@@ -288,7 +288,7 @@ textarea {
 }
 
 .footer {
-    margin-top: -4vh;
+    margin-top: -5vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -300,10 +300,17 @@ textarea {
 }
 
 @media only screen and (max-width: 480px) {
+    section {
+        scroll-snap-align: none;
+    }
+
     .project-div img {
-        height: 25vh;
-        width: fit-content;
-        padding: 2vh;
+        max-width: 45vh;
+        height: auto;
+    }
+
+    .div-projects-text h3 {
+        font-size: 3vh;
     }
 
     .contact-div {
@@ -318,9 +325,8 @@ textarea {
         font-size: 2.5vh;
     }
 
-    html {
-        scroll-behavior: smooth;
-        scroll-snap-type: y proximity;
+    .section+.contact-section {
+        padding-top: 5vh;
     }
 }
 
@@ -340,7 +346,7 @@ textarea {
 
     .section {
         flex-direction: column;
-        padding-top: 11vh;
+        padding-top: 10vh;
     }
 
     .home-section {
