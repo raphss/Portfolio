@@ -10,7 +10,7 @@
 
 ## Sobre o Projeto
 
-Uma aplicação que visa o gerenciamento de soluções para erros encontrados na plataforma Syslink. Desenvolvida em Java com interfaces gráficas utilizando Java Swing.
+Um portfólio interativo para destacar minhas habilidades e experiências como desenvolvedor Full Stack. Desenvolvido com HTML, CSS, JavaScript e Bootstrap
 
 ## Como Contribuir
 
