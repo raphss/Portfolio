@@ -9,7 +9,7 @@
     "build": "webpack --config webpack.prod.js",
     "babel": "babel ./src/index.js --out-file ./src/index.js",
     "build-css": "postcss src/style.css -o src/style.css && npm run build",
-    "git-pgs": "git subtree push --prefix dist origin git-pgs",
+    "git-pages": "git subtree push --prefix dist origin git-pages",
     "lint": "eslint ./src/*.js",
     "lint:fix": "eslint ./src/*.js --fix"
   },
