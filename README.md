@@ -1,6 +1,6 @@
 # Portfolio
 
-> Meu porfólio - versão 1.0
+> Meu portfólio - versão 1.0
 
 [![Live Website][url-image]][url]
 
@@ -31,4 +31,3 @@ Para mais informações sobre o projeto ou para entrar em contato, visite a [pá
 <!-- Markdown link & img dfn's -->
 [url]: https://raphaelvilete.tech/
 [url-image]: https://img.shields.io/badge/Live_Website-gray
-
