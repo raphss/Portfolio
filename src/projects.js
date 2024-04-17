@@ -89,7 +89,7 @@ function createProjectText(projectName, projectDescription) {
 
 function projects() {
   const projectsSection = document.createElement('section');
-  projectsSection.classList.add('section', 'proj-section');
+  projectsSection.classList.add('section', 'proj-section', 'hidden');
 
   const divMainCarousel = document.createElement('div');
   divMainCarousel.classList.add(

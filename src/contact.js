@@ -1,6 +1,6 @@
 function contact() {
   const contactSection = document.createElement('section');
-  contactSection.classList.add('section', 'contact-section');
+  contactSection.classList.add('section', 'contact-section', 'hidden');
 
   const contactDiv = document.createElement('div');
   contactDiv.classList.add('contact-div');

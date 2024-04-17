@@ -117,7 +117,7 @@ const bootstrapIcon = `
 
 function about() {
   const aboutSection = document.createElement('section');
-  aboutSection.classList.add('section', 'about-section');
+  aboutSection.classList.add('section', 'about-section', 'hidden');
 
   const academicH2 = document.createElement('h2');
   academicH2.classList.add('section-title');

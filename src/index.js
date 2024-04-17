@@ -93,8 +93,10 @@ window.addEventListener('scroll', () => {
 
   removeActiveClass(navLinks);
 
+  const navbarHeight = window.innerHeight * 0.1; // 10vh
+
   for (let i = 0; i < sections.length; i++) {
-    const sectionTop = sections[i].offsetTop;
+    const sectionTop = sections[i].offsetTop - navbarHeight;
     const sectionBottom = sectionTop + sections[i].offsetHeight;
 
     if (
@@ -103,7 +105,13 @@ window.addEventListener('scroll', () => {
     ) {
       const activeLink = document.querySelector(`a[href="${sectionIds[i]}"]`);
       if (activeLink) {
+        activeLink.classList.remove('active');
         activeLink.classList.add('active');
+      }
+    } else {
+      const activeLink = document.querySelector(`a[href="${sectionIds[i]}"]`);
+      if (activeLink) {
+        activeLink.classList.remove('active');
       }
     }
   }
@@ -115,3 +123,40 @@ function removeActiveClass(navLinks) {
     navLinks[j].classList.remove('active');
   }
 }
+
+const blurDivs = document.querySelectorAll('.blur-load');
+blurDivs.forEach((div) => {
+  const img = div.querySelector('img');
+
+  function loaded() {
+    div.classList.add('loaded');
+  }
+
+  if (img.complete) {
+    loaded();
+  } else {
+    img.addEventListener('load', loaded);
+  }
+});
+
+const sectionsSelection = document.querySelectorAll('.section');
+
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.intersectionRatio > 0) {
+        entry.target.classList.add('fade-in');
+      } else {
+        entry.target.classList.remove('fade-in');
+      }
+    });
+  },
+  {
+    threshold: 0.2,
+    // eslint-disable-next-line prettier/prettier
+  }
+);
+
+sectionsSelection.forEach((section) => {
+  observer.observe(section);
+});

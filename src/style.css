@@ -1,6 +1,20 @@
 @import "bootstrap/dist/css/bootstrap";
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap');
 
+@keyframes pulse {
+    0% {
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    50% {
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    100% {
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+}
+
 :root {
     color-scheme: dark;
 }
@@ -73,12 +87,54 @@ p,
     padding: 8vh 2vh 0vh 2vh;
     height: 100vh;
     margin: 0vh 2vh;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+}
+
+.fade-in {
+    opacity: 1;
 }
 
 .profile-picture {
     height: 35vh;
     border-radius: 50%;
     margin-bottom: 2vh;
+    display: block;
+    aspect-ratio: 1/1;
+    width: 100%;
+    object-position: center;
+    object-fit: cover;
+}
+
+.blur-load::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    animation: pulse 2s infinite;
+    border-radius: 50%;
+}
+
+.blur-load.loaded::before {
+    content: none;
+}
+
+.blur-load {
+    background-image: url(./images/profile-small.jpg);
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    height: 35vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.blur-load>img {
+    opacity: 0;
+    transition: opacity 200ms ease-in-out;
+}
+
+.blur-load.loaded>img {
+    opacity: 1;
 }
 
 .div-profile {
@@ -340,7 +396,8 @@ textarea {
         margin-top: 2vh;
     }
 
-    .profile-picture {
+    .profile-picture,
+    .blur-load {
         height: 30vh;
     }
 

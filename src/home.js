@@ -28,15 +28,20 @@ const linkedinSVG = `
 
 function home() {
   const homeSection = document.createElement('section');
-  homeSection.classList.add('section', 'home-section');
+  homeSection.classList.add('section', 'home-section', 'hidden');
 
   const divProfile = document.createElement('div');
   divProfile.classList.add('div-profile');
 
+  const divProfilePicture = document.createElement('div');
+  divProfilePicture.classList.add('div-profile-picture', 'blur-load');
+
   const profilePicture = document.createElement('img');
   profilePicture.classList.add('profile-picture');
   profilePicture.setAttribute('src', './images/profile.jpg');
-  profilePicture.setAttribute('alt', 'profile-picture ');
+  profilePicture.setAttribute('loading', 'lazy');
+
+  divProfilePicture.appendChild(profilePicture);
 
   const name = document.createElement('p');
   name.textContent = 'Raphael Vilete';
@@ -51,7 +56,7 @@ function home() {
     );
   });
 
-  divProfile.appendChild(profilePicture);
+  divProfile.appendChild(divProfilePicture);
   divProfile.appendChild(name);
   divProfile.appendChild(cvButton);
 
