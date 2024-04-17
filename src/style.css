@@ -97,10 +97,10 @@ p,
 
 .profile-picture {
     height: 35vh;
+    width: 35vh;
     border-radius: 50%;
     margin-bottom: 2vh;
     display: block;
-    aspect-ratio: 1/1;
     width: 100%;
     object-position: center;
     object-fit: cover;
@@ -124,6 +124,7 @@ p,
     background-position: center;
     border-radius: 50%;
     height: 35vh;
+    width: 35vh;
     position: relative;
 }
 
@@ -395,21 +396,10 @@ textarea {
         margin-top: 2vh;
     }
 
-    .profile-picture {
-        display: block;
-        aspect-ratio: 1/1;
-        width: 100%;
-        height: 30vh;
-        object-position: center;
-        object-fit: cover;
-    }
-
+    .profile-picture,
     .blur-load {
-        background-size: cover;
-        background-position: center;
-        border-radius: 50%;
         height: 30vh;
-        position: relative;
+        width: 30vh;
     }
 
     .section {
