@@ -26,7 +26,26 @@ const linkedinSVG = `
 </svg>
 `;
 
-function home() {
+function escapeHtml(str) {
+  return String(str || '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function formatHeadline(headline) {
+  const safe = escapeHtml(headline);
+
+  return safe
+    .replaceAll(/Full Stack/gi, '<strong>Full Stack</strong>')
+    .replaceAll(/Web/gi, '<strong>Web</strong>')
+    .replaceAll(/Desktop/gi, '<strong>Desktop</strong>')
+    .replaceAll(/APIs?/gi, '<strong>API</strong>');
+}
+
+function home(content, t, locale) {
   const homeSection = document.createElement('section');
   homeSection.classList.add('section', 'home-section', 'hidden');
 
@@ -36,9 +55,17 @@ function home() {
   const divProfilePicture = document.createElement('div');
   divProfilePicture.classList.add('div-profile-picture', 'blur-load');
 
+  if (content?.profilePicSmallPath) {
+    divProfilePicture.style.backgroundImage = `url(${content.profilePicSmallPath})`;
+  }
+
   const profilePicture = document.createElement('img');
   profilePicture.classList.add('profile-picture');
-  profilePicture.setAttribute('src', './images/profile.jpg');
+
+  if (content?.profilePicFullPath) {
+    profilePicture.setAttribute('src', content.profilePicFullPath);
+  }
+
   profilePicture.setAttribute('loading', 'lazy');
 
   divProfilePicture.appendChild(profilePicture);
@@ -48,12 +75,11 @@ function home() {
 
   const cvButton = document.createElement('button');
   cvButton.classList.add('btn', 'btn-dark');
-  cvButton.textContent = 'Baixar Curriculo';
+
+  cvButton.textContent = t.resumeButton;
+
   cvButton.addEventListener('click', () => {
-    window.open(
-      // eslint-disable-next-line prettier/prettier
-      'https://github.com/raphss/Portfolio/raw/main/Curriculo.pdf'
-    );
+    if (content?.resumePath) window.open(content.resumePath, '_blank');
   });
 
   divProfile.appendChild(divProfilePicture);
@@ -65,9 +91,8 @@ function home() {
 
   const aboutParagraph = document.createElement('p');
   aboutParagraph.classList.add('about-paragraph');
-  aboutParagraph.innerHTML =
-    'Desenvolvedor <strong>Full Stack</strong> com experiência em desenvolvimento de aplicações ' +
-    ' <strong>Web</strong>, <strong>Desktop</strong> e <strong>APIs</strong>.';
+
+  aboutParagraph.innerHTML = formatHeadline(content?.headline);
 
   const divSocials = document.createElement('div');
   divSocials.classList.add('div-socials');
@@ -80,10 +105,12 @@ function home() {
   githubIcon.classList.add('icon');
 
   const linkedinIcon = document.createElement('a');
+
+  const linkedinBaseUrl = 'https://www.linkedin.com/in/raphaelvilete/';
+
   linkedinIcon.setAttribute(
     'href',
-    // eslint-disable-next-line prettier/prettier
-    'https://www.linkedin.com/in/raphael-vilete-a72277261'
+    locale === 'pt' ? `${linkedinBaseUrl}?locale=pt_BR` : linkedinBaseUrl,
   );
   linkedinIcon.setAttribute('target', '_blank');
   linkedinIcon.setAttribute('rel', 'noopener noreferrer');

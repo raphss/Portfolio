@@ -80,6 +80,35 @@ p,
     font-size: 1.3rem;
 }
 
+.lang-toggle {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 1.05rem;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: none;
+}
+
+.lang-option {
+    opacity: 0.35;
+    transition: opacity 0.15s ease-in-out;
+}
+
+.lang-option.is-active {
+    opacity: 1;
+}
+
+.lang-toggle:hover .lang-option:not(.is-active) {
+    opacity: 0.35;
+}
+
+.lang-toggle:has(.lang-option:not(.is-active):hover) .lang-option:not(.is-active) {
+    opacity: 0.35;
+}
+
+.lang-toggle:has(.lang-option:not(.is-active):hover) .lang-option:not(.is-active):hover {
+    opacity: 0.7;
+}
+
 .section {
     display: flex;
     justify-content: space-around;
@@ -119,7 +148,7 @@ p,
 }
 
 .blur-load {
-    background-image: url(./images/profile-small.jpg);
+    background-image: none;
     background-size: cover;
     background-position: center;
     border-radius: 50%;
@@ -222,9 +251,10 @@ p,
     flex-wrap: wrap;
 }
 
-.tool svg {
+.tool img {
     max-width: 7vh;
     max-height: 7vh;
+    object-fit: contain;
 }
 
 .proj-section {

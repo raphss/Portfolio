@@ -1,4 +1,4 @@
-function contact() {
+function contact(t, locale) {
   const contactSection = document.createElement('section');
   contactSection.classList.add('section', 'contact-section', 'hidden');
 
@@ -7,8 +7,9 @@ function contact() {
 
   const contactHeaderP = document.createElement('p');
   contactHeaderP.innerHTML =
-    'Para encontrar mais projetos ou para entrar em contato, visite minhas redes sociais ' +
-    '(<a href="#">topo da página</a>) ou envie um email através dos campos abaixo.';
+    `${t.contact.textBeforeLink}` +
+    `(<a href="#">${t.contact.topLinkLabel}</a>)` +
+    `${t.contact.textAfterLink}`;
 
   const contactForm = document.createElement('form');
   contactForm.action = 'https://api.web3forms.com/submit';
@@ -23,24 +24,24 @@ function contact() {
   const nameField = document.createElement('input');
   nameField.type = 'text';
   nameField.name = 'name';
-  nameField.placeholder = 'Nome';
+  nameField.placeholder = t.contact.namePlaceholder;
   nameField.required = true;
 
   const emailField = document.createElement('input');
   emailField.type = 'email';
   emailField.name = 'email';
-  emailField.placeholder = 'Email';
+  emailField.placeholder = t.contact.emailPlaceholder;
   emailField.required = true;
 
   const messageField = document.createElement('textarea');
   messageField.name = 'message';
-  messageField.placeholder = 'Mensagem';
+  messageField.placeholder = t.contact.messagePlaceholder;
   messageField.required = true;
 
   const submitButton = document.createElement('button');
   submitButton.classList.add('btn', 'btn-dark');
   submitButton.type = 'submit';
-  submitButton.textContent = 'Enviar Email';
+  submitButton.textContent = t.contact.submitButton;
 
   contactForm.appendChild(hiddenField);
   contactForm.appendChild(nameField);
@@ -58,14 +59,26 @@ function contact() {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          alert('Formulário enviado com sucesso!');
+          alert(
+            locale === 'pt'
+              ? 'Formulário enviado com sucesso!'
+              : 'Form submitted successfully!',
+          );
           contactForm.reset();
         } else {
-          alert('Erro ao enviar o formulário. Por favor, tente novamente.');
+          alert(
+            locale === 'pt'
+              ? 'Erro ao enviar o formulário. Por favor, tente novamente.'
+              : 'Error submitting the form. Please try again.',
+          );
         }
       })
-      .catch((error) => {
-        alert('Erro ao enviar o formulário. Por favor, tente novamente.');
+      .catch(() => {
+        alert(
+          locale === 'pt'
+            ? 'Erro ao enviar o formulário. Por favor, tente novamente.'
+            : 'Error submitting the form. Please try again.',
+        );
       });
   });
 

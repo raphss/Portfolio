@@ -1,6 +1,6 @@
 # Portfolio
 
-> Meu portfólio - versão 1.0
+> My portfolio – version 2.0
 
 [![Live Website][url-image]][url]
 
@@ -8,26 +8,19 @@
     <img src="portfolio.png" alt="Portfolio Home" width="600">
 </p>
 
-## Sobre o Projeto
+## About the Project
 
-Um portfólio interativo para destacar minhas habilidades e experiências como desenvolvedor Full Stack. Desenvolvido com HTML, CSS, JavaScript e Bootstrap
+An interactive portfolio designed to showcase my skills and experience as a Full Stack Developer. Built with HTML, CSS, JavaScript, and Bootstrap.
 
-## Como Contribuir
+## License
 
-1. Faça um fork do repositório
-2. Crie uma branch para sua feature (`git checkout -b feature/MinhaFeature`)
-3. Faça commit das suas mudanças (`git commit -am 'Adiciona uma nova feature'`)
-4. Faça push para a branch (`git push origin feature/MinhaFeature`)
-5. Abra um Pull Request
+This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
 
-## Licença
+## Contact
 
-Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
-
-## Contato
-
-Para mais informações sobre o projeto ou para entrar em contato, visite a [página de contatos](https://raphaelvilete.tech/#contato).
+For more information about the project or to get in touch, visit the [contact page](https://raphaelvilete.tech/#contact).
 
 <!-- Markdown link & img dfn's -->
+
 [url]: https://raphaelvilete.tech/
 [url-image]: https://img.shields.io/badge/Live_Website-gray

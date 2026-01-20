@@ -1,22 +1,3 @@
-/* eslint-disable prettier/prettier */
-const restaurantImages = [
-  './images/1-restaurant.png',
-  './images/2-restaurant.png',
-  './images/3-restaurant.png',
-];
-
-const syslinkImages = [
-  './images/1-syslink.png',
-  './images/2-syslink.png',
-  './images/3-syslink.png',
-];
-
-const emailApiImages = [
-  './images/1-email.png',
-  './images/2-email.png',
-  './images/3-email.png',
-];
-
 const githubSVG = `
 <svg 
   xmlns="http://www.w3.org/2000/svg" 
@@ -31,6 +12,15 @@ const githubSVG = `
 </svg>
 `;
 
+function escapeHtml(str) {
+  return String(str || '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
 function createProjectDiv(images) {
   const div = document.createElement('div');
   div.classList.add('project-div');
@@ -44,24 +34,27 @@ function createProjectDiv(images) {
   divBtns.classList.add('slider-buttons');
 
   const imgElement = document.createElement('img');
-  imgElement.src = images[imgIndex];
+  imgElement.src = images[imgIndex] || '';
+  imgElement.loading = 'lazy';
   divImage.appendChild(imgElement);
 
   const prevButton = document.createElement('button');
   prevButton.classList.add('btn', 'btn-dark');
   prevButton.textContent = '❮';
+  prevButton.disabled = images.length <= 1;
   prevButton.addEventListener('click', () => {
     imgIndex = (imgIndex - 1 + images.length) % images.length;
-    imgElement.src = images[imgIndex];
+    imgElement.src = images[imgIndex] || '';
   });
   divBtns.appendChild(prevButton);
 
   const nextButton = document.createElement('button');
   nextButton.classList.add('btn', 'btn-dark');
   nextButton.textContent = '❯';
+  nextButton.disabled = images.length <= 1;
   nextButton.addEventListener('click', () => {
     imgIndex = (imgIndex + 1) % images.length;
-    imgElement.src = images[imgIndex];
+    imgElement.src = images[imgIndex] || '';
   });
   divBtns.appendChild(nextButton);
 
@@ -76,10 +69,10 @@ function createProjectText(projectName, projectDescription) {
   divProjectText.classList.add('div-projects-text');
 
   const h3Project = document.createElement('h3');
-  h3Project.textContent = projectName;
+  h3Project.textContent = projectName || '';
 
   const pProject = document.createElement('p');
-  pProject.innerHTML = projectDescription;
+  pProject.innerHTML = escapeHtml(projectDescription);
 
   divProjectText.appendChild(h3Project);
   divProjectText.appendChild(pProject);
@@ -87,16 +80,55 @@ function createProjectText(projectName, projectDescription) {
   return divProjectText;
 }
 
-function projects() {
+function createProjectButtons(links) {
+  const divButtons = document.createElement('div');
+  divButtons.classList.add('div-projects-buttons');
+
+  for (let i = 0; i < links.length; i++) {
+    const link = links[i];
+    if (!link?.url) continue;
+
+    if (link.kind === 'github') {
+      const githubLink = document.createElement('a');
+      githubLink.setAttribute('href', link.url);
+      githubLink.setAttribute('target', '_blank');
+      githubLink.setAttribute('rel', 'noopener noreferrer');
+      githubLink.innerHTML = githubSVG;
+      githubLink.classList.add('icon');
+      divButtons.appendChild(githubLink);
+      continue;
+    }
+
+    const button = document.createElement('button');
+    button.classList.add('btn', 'btn-dark');
+    button.textContent = link.label || 'Open';
+    button.addEventListener('click', () => {
+      window.open(link.url, '_blank');
+    });
+    divButtons.appendChild(button);
+  }
+
+  return divButtons;
+}
+
+function projects(projectsData) {
   const projectsSection = document.createElement('section');
   projectsSection.classList.add('section', 'proj-section', 'hidden');
+
+  const list = Array.isArray(projectsData?.projects)
+    ? projectsData.projects
+    : [];
+
+  if (!list.length) {
+    return projectsSection;
+  }
 
   const divMainCarousel = document.createElement('div');
   divMainCarousel.classList.add(
     'carousel',
     'slide',
     'w-100',
-    'div-main-carousel'
+    'div-main-carousel',
   );
   divMainCarousel.id = 'mainCarouselAuto';
   divMainCarousel.setAttribute('data-bs-ride', 'carousel');
@@ -104,121 +136,29 @@ function projects() {
   const divCarouselInner = document.createElement('div');
   divCarouselInner.classList.add('carousel-inner');
 
-  const divCarouselItem1 = document.createElement('div');
-  divCarouselItem1.classList.add('carousel-item', 'active');
+  for (let i = 0; i < list.length; i++) {
+    const p = list[i];
 
-  const divCarouselItem2 = document.createElement('div');
-  divCarouselItem2.classList.add('carousel-item');
+    const divCarouselItem = document.createElement('div');
+    divCarouselItem.classList.add('carousel-item');
+    if (i === 0) divCarouselItem.classList.add('active');
 
-  const divCarouselItem3 = document.createElement('div');
-  divCarouselItem3.classList.add('carousel-item');
+    const divSlider = document.createElement('div');
+    divSlider.classList.add('div-slider');
 
-  const divRestaurant = document.createElement('div');
-  divRestaurant.classList.add('div-slider');
-  const divRestaurantSlider = createProjectDiv(restaurantImages);
-  const divRestaurantText = createProjectText(
-    'Restaurante Japonês',
-    'Uma página de restaurante de comida japonesa. Apresenta opções do menu, ' +
-      'informações de localização, contato e agenda de horários. Desenvolvida com HTML, CSS e JavaScript.'
-  );
-  /// //////////////////////////////////////////
-  const divRestaurantTextButtons = document.createElement('div');
-  divRestaurantTextButtons.classList.add('div-projects-buttons');
+    const images = (p.images || []).map((img) => img.imagePath).filter(Boolean);
+    const divProjectSlider = createProjectDiv(images);
 
-  const buttonLivePage = document.createElement('button');
-  buttonLivePage.classList.add('btn', 'btn-dark');
-  buttonLivePage.textContent = 'Live Page';
-  buttonLivePage.addEventListener('click', () => {
-    window.open('https://restaurantpage.live', '_blank');
-  });
+    const divProjectText = createProjectText(p.title, p.description);
+    const divButtons = createProjectButtons(p.links || []);
+    divProjectText.appendChild(divButtons);
 
-  const githubRestaurant = document.createElement('a');
-  githubRestaurant.setAttribute(
-    'href',
-    'https://github.com/raphss/Restaurant-Page'
-  );
-  githubRestaurant.setAttribute('target', '_blank');
-  githubRestaurant.setAttribute('rel', 'noopener noreferrer');
-  githubRestaurant.innerHTML = githubSVG;
-  githubRestaurant.classList.add('icon');
+    divSlider.appendChild(divProjectSlider);
+    divSlider.appendChild(divProjectText);
 
-  divRestaurantTextButtons.appendChild(buttonLivePage);
-  divRestaurantTextButtons.appendChild(githubRestaurant);
-
-  divRestaurantText.appendChild(divRestaurantTextButtons);
-
-  divRestaurant.appendChild(divRestaurantSlider);
-  divRestaurant.appendChild(divRestaurantText);
-
-  const divSyslink = document.createElement('div');
-  divSyslink.classList.add('div-slider');
-  const divSyslinkSloder = createProjectDiv(syslinkImages);
-  const divSyslinkText = createProjectText(
-    'Syslink',
-    'Uma aplicação que visa o gerenciamento de soluções para erros encontrados ' +
-      'na plataforma <a target="_blank" href="https://www.syslink.com.br/">Syslink</a>. ' +
-      'Desenvolvida em Java com interfaces gráficas utilizando Java Swing.'
-  );
-
-  const divSyslinkTextButtons = document.createElement('div');
-  divSyslinkTextButtons.classList.add('div-projects-buttons');
-
-  const buttonDownloadExe = document.createElement('button');
-  buttonDownloadExe.classList.add('btn', 'btn-dark');
-  buttonDownloadExe.textContent = 'Baixar Instalador';
-  buttonDownloadExe.addEventListener('click', () => {
-    window.open('https://github.com/raphss/Syslink/raw/main/dist/Syslink.exe');
-  });
-
-  const githubSyslink = document.createElement('a');
-  githubSyslink.setAttribute('href', 'https://github.com/raphss/Syslink');
-  githubSyslink.setAttribute('target', '_blank');
-  githubSyslink.setAttribute('rel', 'noopener noreferrer');
-  githubSyslink.innerHTML = githubSVG;
-  githubSyslink.classList.add('icon');
-
-  divSyslinkTextButtons.appendChild(buttonDownloadExe);
-  divSyslinkTextButtons.appendChild(githubSyslink);
-
-  divSyslinkText.appendChild(divSyslinkTextButtons);
-
-  divSyslink.appendChild(divSyslinkSloder);
-  divSyslink.appendChild(divSyslinkText);
-
-  const divEmailApi = document.createElement('div');
-  divEmailApi.classList.add('div-slider');
-  const divEmailApiSlider = createProjectDiv(emailApiImages);
-  const divEmailApiText = createProjectText(
-    'Email API',
-    'Uma API para enviar emails e armazenar as informações no banco de dados, ' +
-      'fornecendo acesso aos detalhes de envio, como remetente, destinatário, assunto, texto e etc. ' +
-      'Desenvolvida em Java com Spring Boot.'
-  );
-
-  const divEmailApiTextButtons = document.createElement('div');
-  divEmailApiTextButtons.classList.add('div-projects-buttons');
-
-  const githubEmailApi = document.createElement('a');
-  githubEmailApi.setAttribute('href', 'https://github.com/raphss/email-API');
-  githubEmailApi.setAttribute('target', '_blank');
-  githubEmailApi.setAttribute('rel', 'noopener noreferrer');
-  githubEmailApi.innerHTML = githubSVG;
-  githubEmailApi.classList.add('icon');
-
-  divEmailApiTextButtons.appendChild(githubEmailApi);
-
-  divEmailApiText.appendChild(divEmailApiTextButtons);
-
-  divEmailApi.appendChild(divEmailApiSlider);
-  divEmailApi.appendChild(divEmailApiText);
-
-  divCarouselItem1.appendChild(divRestaurant);
-  divCarouselItem2.appendChild(divSyslink);
-  divCarouselItem3.appendChild(divEmailApi);
-
-  divCarouselInner.appendChild(divCarouselItem1);
-  divCarouselInner.appendChild(divCarouselItem2);
-  divCarouselInner.appendChild(divCarouselItem3);
+    divCarouselItem.appendChild(divSlider);
+    divCarouselInner.appendChild(divCarouselItem);
+  }
 
   const buttonCarouselPrev = document.createElement('button');
   buttonCarouselPrev.classList.add('carousel-control-prev');

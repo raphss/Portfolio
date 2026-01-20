@@ -8,26 +8,54 @@ import projects from './projects.js';
 import contact from './contact.js';
 import footer from './footer.js';
 
+import labels from './i18n/labels';
+import { getLocale } from './i18n/locale';
+import {
+  getContent,
+  getProjects,
+  normalizeContent,
+  normalizeProjects,
+} from './api';
+
 if (process.env.NODE_ENV !== 'production') {
   console.log('Looks like we are in development mode!');
-} else {
-  console.log('Looks like we are in production mode!');
 }
 
-function component() {
-  const nav = navbar();
+window.addEventListener('localechange', () => {
+  window.location.reload();
+});
 
-  const homeSection = home();
+async function component() {
+  const locale = getLocale();
+  const t = labels[locale];
+
+  let content = {};
+  try {
+    content = normalizeContent(await getContent(locale));
+  } catch (err) {
+    content = normalizeContent({});
+  }
+
+  let projectsData = { projects: [] };
+  try {
+    projectsData = normalizeProjects(await getProjects(locale));
+  } catch (err) {
+    projectsData = normalizeProjects({});
+  }
+
+  const nav = navbar(t, locale);
+
+  const homeSection = home(content, t, locale);
   homeSection.id = '#';
 
-  const aboutSection = about();
-  aboutSection.id = 'sobre';
+  const aboutSection = about(content, t);
+  aboutSection.id = 'about';
 
-  const projectsSection = projects();
-  projectsSection.id = 'projetos';
+  const projectsSection = projects(projectsData);
+  projectsSection.id = 'projects';
 
-  const contactSection = contact();
-  contactSection.id = 'contato';
+  const contactSection = contact(t, locale);
+  contactSection.id = 'contact';
 
   const footerModule = footer();
 
@@ -41,7 +69,7 @@ function component() {
   };
 }
 
-const elements = component();
+const elements = await component();
 document.body.prepend(elements.nav);
 document.body.appendChild(elements.homeSection);
 document.body.appendChild(elements.aboutSection);
@@ -62,18 +90,12 @@ for (let i = 0; i < navLinks.length; i++) {
     }, 500);
   });
 
-  if (navLinks[i].textContent === 'Inicio') {
-    navLinks[i].href = '#';
-  }
-  if (navLinks[i].textContent === 'Sobre') {
-    navLinks[i].href = '#sobre';
-  }
-  if (navLinks[i].textContent === 'Projetos') {
-    navLinks[i].href = '#projetos';
-  }
-  if (navLinks[i].textContent === 'Contato') {
-    navLinks[i].href = '#contato';
-  }
+  const { section } = navLinks[i].dataset;
+
+  if (section === 'home') navLinks[i].href = '#';
+  if (section === 'about') navLinks[i].href = '#about';
+  if (section === 'projects') navLinks[i].href = '#projects';
+  if (section === 'contact') navLinks[i].href = '#contact';
 }
 
 window.addEventListener('scroll', () => {
@@ -89,7 +111,7 @@ window.addEventListener('scroll', () => {
     elements.projectsSection,
     elements.contactSection,
   ];
-  const sectionIds = ['#', '#sobre', '#projetos', '#contato'];
+  const sectionIds = ['#', '#about', '#projects', '#contact'];
 
   removeActiveClass(navLinks);
 
@@ -153,8 +175,7 @@ const observer = new IntersectionObserver(
   },
   {
     threshold: 0.2,
-    // eslint-disable-next-line prettier/prettier
-  }
+  },
 );
 
 sectionsSelection.forEach((section) => {
