@@ -128,7 +128,7 @@ p,
     height: 35vh;
     width: 35vh;
     border-radius: 50%;
-    margin-bottom: 2vh;
+    margin-bottom: 0;
     display: block;
     width: 100%;
     object-position: center;
@@ -173,10 +173,55 @@ p,
     flex-direction: column;
     font-size: 4vh;
     margin-top: 2vh;
+    --profile-action-gap: 1.25vh;
+}
+
+.div-profile-picture {
+    margin-bottom: var(--profile-action-gap);
+}
+
+.profile-name {
+    margin: 0;
 }
 
 .btn {
     font-size: 2.5vh;
+}
+
+.hire-button {
+    margin-top: var(--profile-action-gap);
+    color: #ffffff;
+    font-size: 2.5vh;
+    font-weight: 500;
+    background-color: #212529;
+    border-color: #212529;
+}
+
+.hire-button:hover,
+.hire-button:focus {
+    color: #ffffff;
+    background-color: #30363b;
+    border-color: #30363b;
+}
+
+.resume-button {
+    color: #ffffff;
+    font-size: 2.15vh;
+    padding: 0.3rem 0.6rem;
+    background-color: transparent;
+    border-width: 0.1vh;
+    border-color: rgba(255, 255, 255, 0.65);
+}
+
+.resume-button:hover,
+.resume-button:focus {
+    color: #ffffff;
+    background-color: #1b1f21;
+    border-color: #ffffff;
+}
+
+.div-profile .hire-button + .btn {
+    margin-top: 1.4vh;
 }
 
 .div-about {
@@ -209,6 +254,14 @@ p,
 .icon:hover svg {
     transform: rotate(360deg);
     opacity: 100%;
+}
+
+.upwork-icon svg {
+    transform: translate(-0.2vh, 0.2vh);
+}
+
+.upwork-icon:hover svg {
+    transform: translate(-0.2vh, 0.2vh) rotate(360deg);
 }
 
 .about-section {
@@ -314,18 +367,129 @@ p,
     height: 100vh;
 }
 
+.div-image {
+    position: relative;
+    display: grid;
+    place-items: center;
+}
+
+.div-image::after {
+    position: absolute;
+    inset: 2vh;
+    content: '';
+    pointer-events: none;
+    background-color: rgba(17, 19, 20, 0.4);
+    border-radius: 3vh;
+    opacity: 0;
+    transition: opacity 0.18s ease-in-out;
+}
+
+.div-image.is-loading::after {
+    opacity: 1;
+}
+
 .project-div img {
+    display: block;
     max-width: 45vw;
     height: auto;
-    border-radius: 3vh;
     padding: 2vh;
+    border-radius: 3vh;
+    opacity: 0;
+    transform: scale(0.985);
+    transition: opacity 0.18s ease-in-out, transform 0.18s ease-in-out;
+}
+
+.project-div img.is-visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.image-loader {
+    position: absolute;
+    z-index: 1;
+    width: 4vh;
+    height: 4vh;
+    pointer-events: none;
+    border: 0.35vh solid rgba(255, 255, 255, 0.28);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    opacity: 0;
+    transform: rotate(-90deg);
+    transition: opacity 0.18s ease-in-out;
+    animation: image-loader-spin 0.75s linear infinite;
+}
+
+.div-image.is-loading .image-loader {
+    opacity: 1;
+}
+
+@keyframes image-loader-spin {
+    to {
+        transform: rotate(270deg);
+    }
 }
 
 .slider-buttons {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 2vh;
+    gap: 1.2vh;
+    margin-top: 0.6vh;
+}
+
+.slider-button {
+    display: grid;
+    width: 4.8vh;
+    height: 4.8vh;
+    padding: 0;
+    color: #ffffff;
+    cursor: pointer;
+    background-color: transparent;
+    border: 0.15vh solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    place-items: center;
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, transform 0.15s ease-in-out;
+}
+
+.slider-button svg {
+    width: 2.3vh;
+    height: 2.3vh;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2.3;
+}
+
+.slider-button:hover,
+.slider-button:focus-visible {
+    background-color: #252b2f;
+    border-color: #ffffff;
+    transform: translateY(-0.15vh);
+}
+
+.slider-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.3;
+}
+
+.slider-button:disabled:hover {
+    background-color: transparent;
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .project-div img,
+    .div-image::after,
+    .image-loader,
+    .slider-button {
+        transition: none;
+    }
+
+    .image-loader {
+        animation: none;
+    }
 }
 
 .contact-section {

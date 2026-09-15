@@ -21,40 +21,186 @@ function escapeHtml(str) {
     .replaceAll("'", '&#039;');
 }
 
+const preloadedImageUrls = new Map();
+
+function preloadImage(src, fetchPriority = 'low') {
+  if (!src) return Promise.resolve(false);
+  if (preloadedImageUrls.has(src)) return preloadedImageUrls.get(src);
+
+  const promise = new Promise((resolve) => {
+    const image = new Image();
+    let finished = false;
+
+    const finish = (loaded) => {
+      if (finished) return;
+      finished = true;
+      window.clearTimeout(timeout);
+      if (!loaded) preloadedImageUrls.delete(src);
+      resolve(loaded);
+    };
+
+    const timeout = window.setTimeout(() => finish(false), 5000);
+    image.decoding = 'async';
+    image.fetchPriority = fetchPriority;
+    image.addEventListener('load', () => finish(true), { once: true });
+    image.addEventListener('error', () => finish(false), { once: true });
+    image.src = src;
+
+    if (image.complete) {
+      window.setTimeout(() => finish(image.naturalWidth > 0), 0);
+    }
+  });
+
+  preloadedImageUrls.set(src, promise);
+  return promise;
+}
+
+function preloadImagesWhenIdle(urls) {
+  const queue = [...new Set(urls.filter(Boolean))];
+
+  const preloadQueue = async () => {
+    for (const src of queue) {
+      // Preload one image at a time so background work does not compete with
+      // the content currently visible to the visitor.
+      // eslint-disable-next-line no-await-in-loop
+      await preloadImage(src);
+    }
+  };
+
+  const schedule = () => {
+    preloadQueue();
+  };
+
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(schedule, { timeout: 1000 });
+  } else {
+    window.setTimeout(schedule, 300);
+  }
+}
+
+function createSliderButton(direction, label) {
+  const button = document.createElement('button');
+  button.classList.add('slider-button', `slider-button-${direction}`);
+  button.type = 'button';
+  button.setAttribute('aria-label', label);
+  button.innerHTML =
+    direction === 'previous'
+      ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 5-7 7 7 7" /></svg>'
+      : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 5 7 7-7 7" /></svg>';
+
+  return button;
+}
+
 function createProjectDiv(images) {
   const div = document.createElement('div');
   div.classList.add('project-div');
 
   let imgIndex = 0;
+  let imageRequest = 0;
 
   const divImage = document.createElement('div');
   divImage.classList.add('div-image');
+  divImage.setAttribute('aria-busy', 'true');
+
+  const imgElement = document.createElement('img');
+  imgElement.alt = '';
+  imgElement.loading = 'lazy';
+  imgElement.decoding = 'async';
+
+  const loadingIndicator = document.createElement('span');
+  loadingIndicator.classList.add('image-loader');
+  loadingIndicator.setAttribute('aria-label', 'Loading image');
+
+  const setLoading = (loading) => {
+    divImage.classList.toggle('is-loading', loading);
+    divImage.setAttribute('aria-busy', String(loading));
+  };
+
+  imgElement.addEventListener('load', () => {
+    imgElement.classList.add('is-visible');
+    setLoading(false);
+  });
+
+  imgElement.addEventListener('error', () => {
+    setLoading(false);
+  });
+
+  divImage.appendChild(imgElement);
+  divImage.appendChild(loadingIndicator);
+
+  if (images[imgIndex]) {
+    imgElement.src = images[imgIndex];
+  } else {
+    setLoading(false);
+  }
+
+  const showImage = async (nextIndex) => {
+    if (images.length <= 1) return;
+
+    imgIndex = nextIndex;
+    const src = images[imgIndex];
+    const requestId = ++imageRequest;
+
+    setLoading(true);
+    const loaded = await preloadImage(src, 'high');
+    if (requestId !== imageRequest) return;
+
+    if (!loaded) {
+      setLoading(false);
+      return;
+    }
+
+    imgElement.classList.remove('is-visible');
+
+    window.setTimeout(() => {
+      if (requestId !== imageRequest) return;
+
+      imgElement.src = src;
+      window.requestAnimationFrame(() => {
+        if (requestId !== imageRequest) return;
+
+        imgElement.classList.add('is-visible');
+        setLoading(false);
+      });
+    }, 160);
+
+    preloadImage(images[(imgIndex + 1) % images.length]);
+  };
 
   const divBtns = document.createElement('div');
   divBtns.classList.add('slider-buttons');
 
-  const imgElement = document.createElement('img');
-  imgElement.src = images[imgIndex] || '';
-  imgElement.loading = 'lazy';
-  divImage.appendChild(imgElement);
-
-  const prevButton = document.createElement('button');
-  prevButton.classList.add('btn', 'btn-dark');
-  prevButton.textContent = '❮';
+  const prevButton = createSliderButton('previous', 'Previous image');
   prevButton.disabled = images.length <= 1;
   prevButton.addEventListener('click', () => {
-    imgIndex = (imgIndex - 1 + images.length) % images.length;
-    imgElement.src = images[imgIndex] || '';
+    showImage((imgIndex - 1 + images.length) % images.length);
+  });
+  prevButton.addEventListener('pointerenter', () => {
+    if (images.length > 1) {
+      preloadImage(images[(imgIndex - 1 + images.length) % images.length]);
+    }
+  });
+  prevButton.addEventListener('focus', () => {
+    if (images.length > 1) {
+      preloadImage(images[(imgIndex - 1 + images.length) % images.length]);
+    }
   });
   divBtns.appendChild(prevButton);
 
-  const nextButton = document.createElement('button');
-  nextButton.classList.add('btn', 'btn-dark');
-  nextButton.textContent = '❯';
+  const nextButton = createSliderButton('next', 'Next image');
   nextButton.disabled = images.length <= 1;
   nextButton.addEventListener('click', () => {
-    imgIndex = (imgIndex + 1) % images.length;
-    imgElement.src = images[imgIndex] || '';
+    showImage((imgIndex + 1) % images.length);
+  });
+  nextButton.addEventListener('pointerenter', () => {
+    if (images.length > 1) {
+      preloadImage(images[(imgIndex + 1) % images.length]);
+    }
+  });
+  nextButton.addEventListener('focus', () => {
+    if (images.length > 1) {
+      preloadImage(images[(imgIndex + 1) % images.length]);
+    }
   });
   divBtns.appendChild(nextButton);
 
@@ -194,11 +340,42 @@ function projects(projectsData) {
   buttonCarouselNext.appendChild(spanCarouselNext);
   buttonCarouselNext.appendChild(spanCarouselNextText);
 
+  const getActiveProjectIndex = () =>
+    Array.from(divCarouselInner.children).findIndex((item) =>
+      item.classList.contains('active'),
+    );
+
+  const preloadAdjacentProject = (offset) => {
+    const activeIndex = getActiveProjectIndex();
+    const targetIndex = (activeIndex + offset + list.length) % list.length;
+    const targetImage = list[targetIndex]?.images?.[0]?.imagePath;
+    preloadImage(targetImage);
+  };
+
+  buttonCarouselPrev.addEventListener('pointerenter', () => {
+    preloadAdjacentProject(-1);
+  });
+  buttonCarouselPrev.addEventListener('focus', () => {
+    preloadAdjacentProject(-1);
+  });
+  buttonCarouselNext.addEventListener('pointerenter', () => {
+    preloadAdjacentProject(1);
+  });
+  buttonCarouselNext.addEventListener('focus', () => {
+    preloadAdjacentProject(1);
+  });
+
   divMainCarousel.appendChild(divCarouselInner);
   divMainCarousel.appendChild(buttonCarouselPrev);
   divMainCarousel.appendChild(buttonCarouselNext);
 
   projectsSection.appendChild(divMainCarousel);
+
+  preloadImagesWhenIdle(
+    list.flatMap((project) =>
+      (project.images || []).map((image) => image.imagePath),
+    ),
+  );
 
   return projectsSection;
 }

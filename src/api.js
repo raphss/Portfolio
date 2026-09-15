@@ -1,13 +1,13 @@
-const API_BASE_URL =
-  'https://api-portfolio-b0grhhf9d9egeubq.canadacentral-01.azurewebsites.net/api/';
+const isLocalDevelopment = ['localhost', '127.0.0.1'].includes(
+  window.location.hostname,
+);
+
+const API_BASE_URL = isLocalDevelopment
+  ? 'http://localhost:3000/api'
+  : 'https://portfolio-api-production-5f26.up.railway.app/api';
 
 async function apiGet(path) {
-  const res = await fetch(`${API_BASE_URL}${path}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  const res = await fetch(`${API_BASE_URL}${path}`);
 
   if (!res.ok) {
     const text = await res.text().catch(() => '');
@@ -29,6 +29,13 @@ export async function getProjects(locale) {
 
 //
 
+function withCacheVersion(url, version) {
+  if (!url || !version) return url || '';
+
+  const separator = url.includes('?') ? '&' : '?';
+  return `${url}${separator}v=${encodeURIComponent(version)}`;
+}
+
 export function normalizeContent(raw) {
   const content = raw || {};
 
@@ -36,9 +43,15 @@ export function normalizeContent(raw) {
   icons.sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
 
   return {
-    profilePicFullPath: content.profilePicFullPath || '',
-    profilePicSmallPath: content.profilePicSmallPath || '',
-    resumePath: content.resumePath || '',
+    profilePicFullPath: withCacheVersion(
+      content.profilePicFullPath,
+      content.updatedAt,
+    ),
+    profilePicSmallPath: withCacheVersion(
+      content.profilePicSmallPath,
+      content.updatedAt,
+    ),
+    resumePath: withCacheVersion(content.resumePath, content.updatedAt),
     headline: content.headline || '',
     educationText: content.educationText || '',
     experienceText: content.experienceText || '',

@@ -8,6 +8,7 @@ module.exports = merge(common, {
   devtool: 'source-map',
 
   devServer: {
+    host: 'localhost',
     static: './src',
   },
 });

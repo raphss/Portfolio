@@ -21,6 +21,12 @@ if (process.env.NODE_ENV !== 'production') {
   console.log('Looks like we are in development mode!');
 }
 
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js').catch(() => {
+    // The site works without persistent image caching when registration fails.
+  });
+}
+
 window.addEventListener('localechange', () => {
   window.location.reload();
 });
@@ -29,19 +35,17 @@ async function component() {
   const locale = getLocale();
   const t = labels[locale];
 
-  let content = {};
-  try {
-    content = normalizeContent(await getContent(locale));
-  } catch (err) {
-    content = normalizeContent({});
-  }
+  const [contentResult, projectsResult] = await Promise.allSettled([
+    getContent(locale),
+    getProjects(locale),
+  ]);
 
-  let projectsData = { projects: [] };
-  try {
-    projectsData = normalizeProjects(await getProjects(locale));
-  } catch (err) {
-    projectsData = normalizeProjects({});
-  }
+  const content = normalizeContent(
+    contentResult.status === 'fulfilled' ? contentResult.value : {},
+  );
+  const projectsData = normalizeProjects(
+    projectsResult.status === 'fulfilled' ? projectsResult.value : {},
+  );
 
   const nav = navbar(t, locale);
 

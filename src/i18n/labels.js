@@ -8,6 +8,7 @@ const labels = {
     },
 
     resumeButton: 'Acessar Currículo',
+    hireButton: 'Trabalhe comigo',
 
     about: {
       educationTitle: 'Educação',
@@ -17,7 +18,7 @@ const labels = {
 
     contact: {
       textBeforeLink:
-        'Para encontrar mais projetos ou para entrar em contato, visite minhas redes sociais ',
+        'Para encontrar mais projetos ou para trabalhar comigo, visite meus perfis ',
       topLinkLabel: 'topo da página',
       textAfterLink: ' ou envie um email através dos campos abaixo.',
       namePlaceholder: 'Nome',
@@ -36,6 +37,7 @@ const labels = {
     },
 
     resumeButton: 'Open Resume',
+    hireButton: 'Hire me',
 
     about: {
       educationTitle: 'Education',
@@ -45,7 +47,7 @@ const labels = {
 
     contact: {
       textBeforeLink:
-        'To find more projects or get in touch, visit my social networks ',
+        'To find more projects or work with me, visit my profiles ',
       topLinkLabel: 'top of the page',
       textAfterLink: ' or send me an email using the form below.',
       namePlaceholder: 'Name',

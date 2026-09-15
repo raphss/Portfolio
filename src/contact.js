@@ -11,6 +11,7 @@ function contact(t, locale) {
     `(<a href="#">${t.contact.topLinkLabel}</a>)` +
     `${t.contact.textAfterLink}`;
 
+
   const contactForm = document.createElement('form');
   contactForm.action = 'https://api.web3forms.com/submit';
   contactForm.method = 'POST';
